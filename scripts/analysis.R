@@ -1,7 +1,6 @@
 library(tidyverse)
 # load the data frame
 df <- read.csv("./data/airbnb.csv")
-
 # check for missing values
 sum(is.na(df)) # 0
 
@@ -51,7 +50,7 @@ boxplot(df$price,
         outline = FALSE,
         horizontal = TRUE)
 
-# class boundaries
+# class width and boundaries
 width <- range_price / 20
 print(width) # 385.35, round up to 400
 width <- 400
@@ -71,7 +70,34 @@ class_price <- data.frame(
   "Classes" = levels(class_boundaries)
 )
 
-class_price
+# frequency polygon
+ggplot(df, mapping = aes(x = price)) +
+  geom_freqpoly(binwidth = 400) +
+  labs(title = "Frequency Polygon of Prices",
+       x = "Prices",
+       y = "Frequency")
+
+# o-give
+h <- hist(df$price, plot = FALSE)
+
+plot(
+  h$breaks[-1],
+  cumsum(h$counts),
+  type = "o",
+  xlab = "Upper Class Boundary",
+  ylab = "Cumulative Frequency",
+  main = "Ogive of Prices"
+)
+
+# skewness
+library(e1071)
+skewness(df$price)
+# 0.9081838
+
+
+
+
+
 
 
 
